@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geogr. John Leonardo Cabrera Espíndola | El Alto, Bolivia</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@400;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Cursor Doble Pulso -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"></div>
+    <div class="cursor-pulse"></div>
+
+    <!-- Curvas de Nivel Animadas (Fondo) -->
+    <svg class="topo-bg" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+        <path class="topo-line" d="M0,100 Q200,50 400,100 T800,100 T1200,100" stroke-dasharray="10,5"/>
+        <path class="topo-line" d="M0,180 Q250,130 500,180 T1000,180" stroke-dasharray="8,4" style="animation-delay: -3s"/>
+        <path class="topo-line" d="M0,260 Q300,210 600,260 T1200,260" stroke-dasharray="12,6" style="animation-delay: -6s"/>
+        <path class="topo-line" d="M0,340 Q200,290 400,340 T800,340 T1200,340" stroke-dasharray="10,5" style="animation-delay: -9s"/>
+        <path class="topo-line" d="M0,420 Q250,370 500,420 T1000,420" stroke-dasharray="8,4" style="animation-delay: -12s"/>
+        <path class="topo-line" d="M0,500 Q300,450 600,500 T1200,500" stroke-dasharray="12,6" style="animation-delay: -15s"/>
+        <path class="topo-line" d="M0,580 Q200,530 400,580 T800,580 T1200,580" stroke-dasharray="10,5" style="animation-delay: -18s"/>
+        <path class="topo-line" d="M0,660 Q250,610 500,660 T1000,660" stroke-dasharray="8,4" style="animation-delay: -21s"/>
+        <path class="topo-line" d="M0,740 Q300,690 600,740 T1200,740" stroke-dasharray="12,6" style="animation-delay: -24s"/>
+        <path class="topo-line" d="M0,820 Q200,770 400,820 T800,820 T1200,820" stroke-dasharray="10,5" style="animation-delay: -27s"/>
+        <path class="topo-line" d="M0,900 Q250,850 500,900 T1000,900" stroke-dasharray="8,4" style="animation-delay: -30s"/>
+    </svg>
+
+    <!-- Animación de Vías Urbanas -->
+    <div class="urban-grid"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">◎</div>
+            <span>JLC</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#about">Sobre Mí</a></li>
+            <li><a href="#skills">Habilidades</a></li>
+            <li><a href="#projects">Proyectos</a></li>
+            <li><a href="#map">Mapa</a></li>
+            <li><a href="#experience">Experiencia</a></li>
+            <li><a href="#contact">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO SECTION CON GLOBO 3D -->
+    <section class="hero-globe">
+        <div class="hero-globe-content">
+            <div class="hero-text">
+                <div class="hero-tag">INGENIERO GEÓGRAFO</div>
+                <h2 class="hero-name">Geogr. John Leonardo Cabrera Espíndola</h2>
+                <div class="location-badge">
+                    <span class="pulse"></span>
+                    EL ALTO, BOLIVIA — 4,150 m.s.n.m.
+                </div>
+                <h1 class="hero-title">
+                    Mapeando el <span class="accent">futuro</span> del territorio
+                </h1>
+                <p class="hero-subtitle">
+                    Especialista en análisis espacial, teledetección y sistemas de información geográfica. 
+                    Transformando datos geoespaciales en soluciones innovadoras desde el altiplano hasta el llano boliviano.
+                </p>
+                <div class="coords">
+                    <div class="coord-item">
+                        <span class="coord-label">LAT</span>
+                        <span class="coord-value" id="lat">-16.5000°</span>
+                    </div>
+                    <div class="coord-item">
+                        <span class="coord-label">LONG</span>
+                        <span class="coord-value" id="long">-68.1500°</span>
+                    </div>
+                    <div class="coord-item">
+                        <span class="coord-label">ELEV</span>
+                        <span class="coord-value">4,150m</span>
+                    </div>
+                </div>
+            </div>
+            <div id="globe-container">
+                <div class="globe-label">🌎 BOLIVIA — CORAZÓN DE SUDAMÉRICA</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROFILE SECTION CON FOTO Y FONDO -->
+    <section class="profile-section" id="about">
+        <div class="profile-bg-image" id="profile-bg"></div>
+        <div class="profile-bg-overlay"></div>
+        <div class="profile-content">
+            <div class="profile-image-container">
+                <img src="assets/profile.png" alt="Geogr. John Leonardo Cabrera Espíndola" class="profile-image" id="profile-img">
+                <div class="profile-frame"></div>
+                <div class="profile-coords-badge">16°30'S 68°09'W</div>
+            </div>
+            <div class="profile-info">
+                <h2>Sobre Mí</h2>
+                <p>
+                    Soy John Leonardo Cabrera Espíndola, Ingeniero Geógrafo desde El Alto, Bolivia. Mi pasión radica en descifrar los patrones ocultos de nuestro territorio andino. 
+                    Combino el rigor científico con la innovación tecnológica para crear soluciones que 
+                    impactan positivamente en la planificación territorial y la gestión ambiental.
+                </p>
+                <p>
+                    Mi experiencia abarca desde el análisis de imágenes satelitales de los glaciares andinos hasta el desarrollo 
+                    de modelos predictivos para la gestión de riesgos en zonas de montaña.
+                </p>
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <div class="profile-stat-number">10+</div>
+                        <div class="profile-stat-label">PROYECTOS</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-number">2</div>
+                        <div class="profile-stat-label">AÑOS EXP.</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-number">15K</div>
+                        <div class="profile-stat-label">KM² ANALIZADOS</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-number">9</div>
+                        <div class="profile-stat-label">DEPARTAMENTOS</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="skills" id="skills">
+        <div class="section-header">
+            <span class="section-number">02</span>
+            <h2 class="section-title">Habilidades</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="skills-container">
+            <div class="skill-card reveal">
+                <div class="skill-icon">🛰️</div>
+                <h3 class="skill-title">Teledetección</h3>
+                <p class="skill-desc">
+                    Procesamiento y análisis de imágenes satelitales multiespectrales e hiperespectrales 
+                    para detección de cambios y monitoreo ambiental en los Andes.
+                </p>
+                <div class="skill-tags">
+                    <span class="skill-tag">SENTINEL</span>
+                    <span class="skill-tag">LANDSAT</span>
+                    <span class="skill-tag">ERDAS</span>
+                    <span class="skill-tag">ENVI</span>
+                </div>
+            </div>
+            <div class="skill-card reveal">
+                <div class="skill-icon">🗺️</div>
+                <h3 class="skill-title">SIG & Cartografía</h3>
+                <p class="skill-desc">
+                    Desarrollo de sistemas de información geográfica, análisis espacial avanzado 
+                    y producción cartográfica de alta calidad.
+                </p>
+                <div class="skill-tags">
+                    <span class="skill-tag">ARCGIS PRO</span>
+                    <span class="skill-tag">QGIS</span>
+                    <span class="skill-tag">POSTGIS</span>
+                    <span class="skill-tag">GEOSERVER</span>
+                </div>
+            </div>
+            <div class="skill-card reveal">
+                <div class="skill-icon">📊</div>
+                <h3 class="skill-title">Análisis de Datos</h3>
+                <p class="skill-desc">
+                    Modelamiento estadístico espacial, machine learning aplicado a geodatos 
+                    y visualización de información geoespacial.
+                </p>
+                <div class="skill-tags">
+                    <span class="skill-tag">PYTHON</span>
+                    <span class="skill-tag">R SPATIAL</span>
+                    <span class="skill-tag">GEOPANDAS</span>
+                    <span class="skill-tag">EARTH ENGINE</span>
+                </div>
+            </div>
+            <div class="skill-card reveal">
+                <div class="skill-icon">📐</div>
+                <h3 class="skill-title">Topografía & GNSS</h3>
+                <p class="skill-desc">
+                    Levantamientos topográficos de precisión, geodesia satelital 
+                    y procesamiento de datos GPS/GNSS.
+                </p>
+                <div class="skill-tags">
+                    <span class="skill-tag">RTK</span>
+                    <span class="skill-tag">LIDAR</span>
+                    <span class="skill-tag">FOTOGRAMETRÍA</span>
+                    <span class="skill-tag">DRONES</span>
+                </div>
+            </div>
+            <div class="skill-card reveal">
+                <div class="skill-icon">🌍</div>
+                <h3 class="skill-title">Gestión Territorial</h3>
+                <p class="skill-desc">
+                    Planificación urbana y regional, evaluación de impacto ambiental 
+                    y ordenamiento territorial sostenible.
+                </p>
+                <div class="skill-tags">
+                    <span class="skill-tag">PTDI</span>
+                    <span class="skill-tag">EIA</span>
+                    <span class="skill-tag">CATASTRO</span>
+                    <span class="skill-tag">ZONIFICACIÓN</span>
+                </div>
+            </div>
+            <div class="skill-card reveal">
+                <div class="skill-icon">💻</div>
+                <h3 class="skill-title">Desarrollo Web GIS</h3>
+                <p class="skill-desc">
+                    Creación de aplicaciones web interactivas con mapas, 
+                    dashboards geoespaciales y APIs de geolocalización.
+                </p>
+                <div class="skill-tags">
+                    <span class="skill-tag">LEAFLET</span>
+                    <span class="skill-tag">MAPBOX</span>
+                    <span class="skill-tag">OPENLAYERS</span>
+                    <span class="skill-tag">CESIUM</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section con Google Drive -->
+    <section class="projects" id="projects">
+        <div class="section-header">
+            <span class="section-number">03</span>
+            <h2 class="section-title">Proyectos</h2>
+            <div class="section-line"></div>
+        </div>
+        <p style="text-align: center; margin-bottom: 2rem; opacity: 0.7; font-size: 0.9rem;">
+            💡 Pasa el cursor sobre cada proyecto y pega el enlace de Google Drive para agregar tu foto
+        </p>
+        <div class="projects-grid">
+            <!-- Proyecto 1 -->
+            <div class="project-card reveal">
+                <img class="project-image" src="" alt="Proyecto" style="display: none;">
+                <div class="project-bg" style="background: linear-gradient(135deg, #2d5a27 0%, #1a4d6e 100%)"></div>
+                <div class="project-placeholder">
+                    <div class="project-placeholder-icon">📷</div>
+                    <div>Pega enlace de Google Drive</div>
+                </div>
+                <div class="project-image-input">
+                    <input type="text" class="gdrive-url" placeholder="Pega enlace de Google Drive...">
+                    <button class="load-image-btn">Cargar</button>
+                </div>
+                <div class="project-overlay">
+                    <span class="project-category">TELEDETECCIÓN</span>
+                    <div class="project-location">📍 Ixiamas, Beni</div>
+                    <h3 class="project-title">Monitoreo de Deforestación Amazónica</h3>
+                    <p class="project-desc">
+                        Sistema automatizado de detección de cambios en cobertura forestal 
+                        usando imágenes Sentinel-2 y algoritmos de machine learning.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Proyecto 2 -->
+            <div class="project-card reveal">
+                <img class="project-image" src="" alt="Proyecto" style="display: none;">
+                <div class="project-bg" style="background: linear-gradient(135deg, #8b6914 0%, #d4a84b 100%)"></div>
+                <div class="project-placeholder">
+                    <div class="project-placeholder-icon">📷</div>
+                    <div>Pega enlace de Google Drive</div>
+                </div>
+                <div class="project-image-input">
+                    <input type="text" class="gdrive-url" placeholder="Pega enlace de Google Drive...">
+                    <button class="load-image-btn">Cargar</button>
+                </div>
+                <div class="project-overlay">
+                    <span class="project-category">CATASTRO MINERO</span>
+                    <div class="project-location">📍 Oruro</div>
+                    <h3 class="project-title">Delimitación de Concesiones</h3>
+                    <p class="project-desc">
+                        Levantamiento catastral y delimitación precisa de concesiones mineras
+                        con tecnología GNSS de alta precisión.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Proyecto 3 -->
+            <div class="project-card reveal">
+                <img class="project-image" src="" alt="Proyecto" style="display: none;">
+                <div class="project-bg" style="background: linear-gradient(135deg, #1a4d6e 0%, #e07850 100%)"></div>
+                <div class="project-placeholder">
+                    <div class="project-placeholder-icon">📷</div>
+                    <div>Pega enlace de Google Drive</div>
+                </div>
+                <div class="project-image-input">
+                    <input type="text" class="gdrive-url" placeholder="Pega enlace de Google Drive...">
+                    <button class="load-image-btn">Cargar</button>
+                </div>
+                <div class="project-overlay">
+                    <span class="project-category">GESTIÓN DE RIESGOS</span>
+                    <div class="project-location">📍 Yungas, La Paz</div>
+                    <h3 class="project-title">Zonificación de Deslizamientos</h3>
+                    <p class="project-desc">
+                        Análisis de susceptibilidad y zonificación de riesgo 
+                        para planificación de emergencias en zonas de ladera.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Proyecto 4 -->
+            <div class="project-card reveal">
+                <img class="project-image" src="" alt="Proyecto" style="display: none;">
+                <div class="project-bg" style="background: linear-gradient(135deg, #e07850 0%, #2d5a27 100%)"></div>
+                <div class="project-placeholder">
+                    <div class="project-placeholder-icon">📷</div>
+                    <div>Pega enlace de Google Drive</div>
+                </div>
+                <div class="project-image-input">
+                    <input type="text" class="gdrive-url" placeholder="Pega enlace de Google Drive...">
+                    <button class="load-image-btn">Cargar</button>
+                </div>
+                <div class="project-overlay">
+                    <span class="project-category">PATRIMONIO</span>
+                    <div class="project-location">📍 Potosí</div>
+                    <h3 class="project-title">Cartografía Histórica</h3>
+                    <p class="project-desc">
+                        Documentación y delimitación de áreas patrimoniales 
+                        del Cerro Rico y centro histórico de Potosí.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Bolivia Map Section -->
+    <section class="map-section" id="map">
+        <div class="section-header">
+            <span class="section-number">04</span>
+            <h2 class="section-title" style="color: var(--topo-cream)">Áreas de Trabajo en Bolivia</h2>
+            <div class="section-line" style="background: linear-gradient(90deg, var(--accent-gold), transparent)"></div>
+        </div>
+        <div class="map-wrapper">
+            <div class="map-info reveal">
+                <h3>Mi Territorio</h3>
+                <p>
+                    Desde El Alto, he tenido el privilegio de trabajar en diversos ecosistemas bolivianos, 
+                    desde el altiplano hasta la Amazonía, contribuyendo a proyectos de conservación, 
+                    desarrollo minero y gestión de riesgos naturales.
+                </p>
+                <ul class="project-locations-list">
+                    <li>
+                        <span class="location-name">🏠 El Alto</span>
+                        <span class="location-type">BASE</span>
+                    </li>
+                    <li>
+                        <span class="location-name">⛏️ Oruro</span>
+                        <span class="location-type">MINERÍA</span>
+                    </li>
+                    <li>
+                        <span class="location-name">🌳 Ixiamas</span>
+                        <span class="location-type">AMAZONÍA</span>
+                    </li>
+                    <li>
+                        <span class="location-name">🏔️ Yungas</span>
+                        <span class="location-type">RIESGOS</span>
+                    </li>
+                    <li>
+                        <span class="location-name">🏛️ Potosí</span>
+                        <span class="location-type">PATRIMONIO</span>
+                    </li>
+                </ul>
+            </div>
+            <div id="bolivia-map" class="reveal"></div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="experience" id="experience">
+        <div class="section-header">
+            <span class="section-number">05</span>
+            <h2 class="section-title">Experiencia</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="timeline-year">2021 - PRESENTE</span>
+                    <h3 class="timeline-title">Especialista GIS Senior</h3>
+                    <p class="timeline-company">Instituto Geográfico Militar - Bolivia</p>
+                    <p class="timeline-desc">
+                        Liderazgo en proyectos de cartografía nacional, implementación de 
+                        infraestructura de datos espaciales y capacitación técnica.
+                    </p>
+                </div>
+            </div>
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="timeline-year">2018 - 2021</span>
+                    <h3 class="timeline-title">Analista de Teledetección</h3>
+                    <p class="timeline-company">Autoridad de Bosques y Tierra (ABT)</p>
+                    <p class="timeline-desc">
+                        Procesamiento de imágenes satelitales para monitoreo de deforestación, 
+                        desarrollo de alertas tempranas de cambio de uso de suelo.
+                    </p>
+                </div>
+            </div>
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="timeline-year">2016 - 2018</span>
+                    <h3 class="timeline-title">Ingeniero de Campo</h3>
+                    <p class="timeline-company">SERGEOTECMIN</p>
+                    <p class="timeline-desc">
+                        Ejecución de levantamientos geológicos-mineros, procesamiento de datos 
+                        GNSS y elaboración de mapas temáticos de recursos minerales.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <h2 class="contact-title reveal">¿Trabajamos juntos?</h2>
+        <p class="contact-subtitle reveal">
+            Siempre estoy interesado en nuevos proyectos que involucren 
+            análisis espacial, cartografía innovadora o soluciones geotecnológicas en Bolivia.
+        </p>
+        <div class="contact-links reveal">
+            <a href="mailto:leoleder1@gmail.com" class="contact-link">
+                <span>✉</span> leoleder1@gmail.com
+            </a>
+            <a href="tel:+59160418185" class="contact-link">
+                <span>☎</span> +591 60418185
+            </a>
+            <a href="https://wa.me/59160418185" class="contact-link" target="_blank">
+                <span>💬</span> WhatsApp
+            </a>
+            <a href="www.linkedin.com/in/leonardo-cabrera-239252217" class="contact-link">
+                <span>in</span> LinkedIn
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-coords">
+            <span>16°30'00"S 68°09'00"W — El Alto, Bolivia</span>
+        </div>
+        <div class="footer-copy">
+            © 2024 Geogr. John Leonardo Cabrera Espíndola — Diseñado con pasión geográfica
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
