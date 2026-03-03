@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geogr. John Leonardo Cabrera Espíndola | El Alto, Bolivia</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@400;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Cursor Doble Pulso -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"></div>
+    <div class="cursor-pulse"></div>
+
+    <!-- Curvas de Nivel Animadas (Fondo) -->
+    <svg class="topo-bg" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+        <path class="topo-line" d="M0,100 Q200,50 400,100 T800,100 T1200,100" stroke-dasharray="10,5"/>
+        <path class="topo-line" d="M0,180 Q250,130 500,180 T1000,180" stroke-dasharray="8,4" style="animation-delay: -3s"/>
+        <path class="topo-line" d="M0,260 Q300,210 600,260 T1200,260" stroke-dasharray="12,6" style="animation-delay: -6s"/>
+        <path class="topo-line" d="M0,340 Q200,290 400,340 T800,340 T1200,340" stroke-dasharray="10,5" style="animation-delay: -9s"/>
+        <path class="topo-line" d="M0,420 Q250,370 500,420 T1000,420" stroke-dasharray="8,4" style="animation-delay: -12s"/>
+        <path class="topo-line" d="M0,500 Q300,450 600,500 T1200,500" stroke-dasharray="12,6" style="animation-delay: -15s"/>
+        <path class="topo-line" d="M0,580 Q200,530 400,580 T800,580 T1200,580" stroke-dasharray="10,5" style="animation-delay: -18s"/>
+        <path class="topo-line" d="M0,660 Q250,610 500,660 T1000,660" stroke-dasharray="8,4" style="animation-delay: -21s"/>
+        <path class="topo-line" d="M0,740 Q300,690 600,740 T1200,740" stroke-dasharray="12,6" style="animation-delay: -24s"/>
+        <path class="topo-line" d="M0,820 Q200,770 400,820 T800,820 T1200,820" stroke-dasharray="10,5" style="animation-delay: -27s"/>
+        <path class="topo-line" d="M0,900 Q250,850 500,900 T1000,900" stroke-dasharray="8,4" style="animation-delay: -30s"/>
+    </svg>
+
+    <!-- Animación de Vías Urbanas -->
+    <div class="urban-grid"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">◎</div>
+            <span>JLC</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#about">Sobre Mí</a></li>
+            <li><a href="#skills">Habilidades</a></li>
+            <li><a href="#gallery">Galería</a></li>
+            <li><a href="#webdev">Desarrollo Web</a></li>
+            <li><a href="#map">Mapa</a></li>
+            <li><a href="#experience">Experiencia</a></li>
+            <li><a href="#contact">Contacto</a></li>
+        </ul>
+        <button class="nav-toggle" aria-label="Menú">☰</button>
+    </nav>
+
+    <!-- HERO SECTION CON GLOBO 3D -->
+    <section class="hero-globe">
+        <div class="hero-globe-content">
+            <div class="hero-text">
+                <div class="hero-tag">INGENIERO GEÓGRAFO & DESARROLLADOR WEB</div>
+                <h2 class="hero-name">Geogr. John Leonardo Cabrera Espíndola</h2>
+                <div class="location-badge">
+                    <span class="pulse"></span>
+                    EL ALTO, BOLIVIA — 4,150 m.s.n.m.
+                </div>
+                <h1 class="hero-title">
+                    Mapeando el <span class="accent">futuro</span> del territorio
+                </h1>
+                <p class="hero-subtitle">
+                    Especialista en análisis espacial, teledetección, sistemas de información geográfica
+                    y desarrollo de aplicaciones web. 
+                    Transformando datos geoespaciales en soluciones innovadoras desde el altiplano hasta el llano boliviano.
+                </p>
+                <div class="coords">
+                    <div class="coord-item">
+                        <span class="coord-label">LAT</span>
+                        <span class="coord-value" id="lat">-16.5000°</span>
+                    </div>
+                    <div class="coord-item">
+                        <span class="coord-label">LONG</span>
+                        <span class="coord-value" id="long">-68.1500°</span>
+                    </div>
+                    <div class="coord-item">
+                        <span class="coord-label">ELEV</span>
+                        <span class="coord-value">4,150m</span>
+                    </div>
+                </div>
+            </div>
+            <div id="globe-container">
+                <div class="globe-label">🌎 BOLIVIA — CORAZÓN DE SUDAMÉRICA</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROFILE SECTION CON FOTO Y FONDO -->
+    <section class="profile-section" id="about">
+        <div class="profile-bg-image" id="profile-bg"></div>
+        <div class="profile-bg-overlay"></div>
+        <div class="profile-content">
+            <div class="profile-image-container">
+                <img src="assets/profile.png" alt="Geogr. John Leonardo Cabrera Espíndola" class="profile-image" id="profile-img">
+                <div class="profile-frame"></div>
+                <div class="profile-coords-badge">16°30'S 68°09'W</div>
+            </div>
+            <div class="profile-info">
+                <h2>Sobre Mí</h2>
+                <p>
+                    Soy John Leonardo Cabrera Espíndola, Ingeniero Geógrafo desde El Alto, Bolivia. Mi pasión radica en descifrar los patrones ocultos de nuestro territorio andino. 
+                    Combino el rigor científico con la innovación tecnológica para crear soluciones que 
+                    impactan positivamente en la planificación territorial y la gestión ambiental.
+                </p>
+                <p>
+                    Mi experiencia abarca desde el análisis de imágenes satelitales de los glaciares andinos hasta el desarrollo 
+                    de modelos predictivos para la gestión de riesgos en zonas de montaña. Además, desarrollo aplicaciones web 
+                    interactivas para herramientas académicas, sistemas de gestión y análisis geoespacial.
+                </p>
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <div class="profile-stat-number">15+</div>
+                        <div class="profile-stat-label">APPS WEB</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-number">10+</div>
+                        <div class="profile-stat-label">PROYECTOS GIS</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-number">15K</div>
+                        <div class="profile-stat-label">KM² ANALIZADOS</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-number">9</div>
+                        <div class="profile-stat-label">DEPARTAMENTOS</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="skills" id="skills">
+        <div class="section-header">
+            <span class="section-number">02</span>
+            <h2 class="section-title">Habilidades</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="skills-container">
+            <div class="skill-card reveal">
+                <div class="skill-icon">🛰️</div>
+                <h3 class="skill-title">Teledetección</h3>
+                <p class="skill-desc">
+                    Procesamiento y análisis de imágenes satelitales multiespectrales e hiperespectrales 
+                    para detección de cambios y monitoreo ambiental en los Andes.
+                </p>
+                <div class="skill-tags">
+                    <span class="skill-tag">SENTINEL</span>
+                    <span class="skill-tag">LANDSAT</span>
+                    <span class="skill-tag">ERDAS</span>
+                    <span class="skill-tag">ENVI</span>
+                </div>
+            </div>
+            <div class="skill-card reveal">
+                <div class="skill-icon">🗺️</div>
+                <h3 class="skill-title">SIG & Cartografía</h3>
+                <p class="skill-desc">
+                    Desarrollo de sistemas de información geográfica, análisis espacial avanzado 
+                    y producción cartográfica de alta precisión para diversos proyectos.
+                </p>
+                <div class="skill-tags">
+                    <span class="skill-tag">QGIS</span>
+                    <span class="skill-tag">ARCGIS</span>
+                    <span class="skill-tag">AUTOCAD</span>
+                    <span class="skill-tag">GLOBAL MAPPER</span>
+                </div>
+            </div>
+            <div class="skill-card reveal">
+                <div class="skill-icon">🚁</div>
+                <h3 class="skill-title">Drones & Fotogrametría</h3>
+                <p class="skill-desc">
+                    Vuelos con drones DJI Phantom y Mavic para fotogrametría, 
+                    generación de modelos digitales del terreno y ortomosaicos.
+                </p>
+                <div class="skill-tags">
+                    <span class="skill-tag">DJI PHANTOM</span>
+                    <span class="skill-tag">DJI MAVIC</span>
+                    <span class="skill-tag">PIX4D</span>
+                    <span class="skill-tag">AGISOFT</span>
+                </div>
+            </div>
+            <div class="skill-card reveal">
+                <div class="skill-icon">💻</div>
+                <h3 class="skill-title">Desarrollo Web</h3>
+                <p class="skill-desc">
+                    Creación de aplicaciones web interactivas, sistemas de gestión, 
+                    herramientas académicas y plataformas de análisis geoespacial en línea.
+                </p>
+                <div class="skill-tags">
+                    <span class="skill-tag">HTML5/CSS3</span>
+                    <span class="skill-tag">JAVASCRIPT</span>
+                    <span class="skill-tag">LEAFLET</span>
+                    <span class="skill-tag">THREE.JS</span>
+                </div>
+            </div>
+            <div class="skill-card reveal">
+                <div class="skill-icon">📊</div>
+                <h3 class="skill-title">Análisis de Datos</h3>
+                <p class="skill-desc">
+                    Geoestadística, interpolación espacial, modelado predictivo 
+                    y visualización de datos para la toma de decisiones territoriales.
+                </p>
+                <div class="skill-tags">
+                    <span class="skill-tag">PYTHON</span>
+                    <span class="skill-tag">R</span>
+                    <span class="skill-tag">GEOESTADÍSTICA</span>
+                    <span class="skill-tag">IDW/KRIGING</span>
+                </div>
+            </div>
+            <div class="skill-card reveal">
+                <div class="skill-icon">🏗️</div>
+                <h3 class="skill-title">Topografía & GNSS</h3>
+                <p class="skill-desc">
+                    Levantamientos topográficos de precisión, procesamiento de datos GNSS 
+                    y control geodésico para proyectos de ingeniería y minería.
+                </p>
+                <div class="skill-tags">
+                    <span class="skill-tag">GNSS</span>
+                    <span class="skill-tag">GPS</span>
+                    <span class="skill-tag">ESTACIÓN TOTAL</span>
+                    <span class="skill-tag">NIVELACIÓN</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================
+         GALERÍA DE PROYECTOS EN CAMPO (FOTOS)
+         ===================================================== -->
+    <section class="photo-gallery" id="gallery">
+        <div class="section-header">
+            <span class="section-number">03</span>
+            <h2 class="section-title">Trabajo en Campo</h2>
+            <div class="section-line"></div>
+        </div>
+        <p class="gallery-intro reveal">
+            Registro fotográfico de proyectos realizados en distintas regiones de Bolivia — desde vuelos con drones 
+            hasta relevamientos topográficos en campo.
+        </p>
+        <div class="gallery-grid">
+            <!-- Fila 1: 1 grande + 2 pequeñas apiladas -->
+            <div class="gallery-item reveal">
+                <img src="assets/proyecto_coroico_plantaciones_de_coca.jpg" alt="Proyecto Coroico - Plantaciones" loading="lazy">
+                <div class="gallery-overlay">
+                    <span class="gallery-tag">TELEDETECCIÓN</span>
+                    <h3>Proyecto Coroico</h3>
+                    <p>Relevamiento de plantaciones de coca en los Yungas de La Paz</p>
+                </div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="assets/dron_mavic_proyecto_coroico.jpg" alt="Dron Mavic en Coroico" loading="lazy">
+                <div class="gallery-overlay">
+                    <span class="gallery-tag">DRONES</span>
+                    <h3>Dron Mavic — Coroico</h3>
+                    <p>Vuelo fotogramétrico con DJI Mavic</p>
+                </div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="assets/dron_phantom.jpg" alt="Dron Phantom" loading="lazy">
+                <div class="gallery-overlay">
+                    <span class="gallery-tag">DRONES</span>
+                    <h3>DJI Phantom</h3>
+                    <p>Equipamiento para levantamiento aéreo</p>
+                </div>
+            </div>
+
+            <!-- Fila 2: 3 iguales -->
+            <div class="gallery-item reveal">
+                <img src="assets/proyecto_salar_de_huyuni.jpg" alt="Salar de Uyuni" loading="lazy">
+                <div class="gallery-overlay">
+                    <span class="gallery-tag">CARTOGRAFÍA</span>
+                    <h3>Salar de Uyuni</h3>
+                    <p>Relevamiento cartográfico en el salar más grande del mundo</p>
+                </div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="assets/proyecto_de_relevamiento_de_sistema_de_drenaje_oruro.jpg" alt="Sistema de Drenaje Oruro" loading="lazy">
+                <div class="gallery-overlay">
+                    <span class="gallery-tag">INGENIERÍA</span>
+                    <h3>Sistema de Drenaje — Oruro</h3>
+                    <p>Relevamiento del sistema de drenaje pluvial de la ciudad de Oruro</p>
+                </div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="assets/proyecto_ixiamas.jpg" alt="Proyecto Ixiamas" loading="lazy">
+                <div class="gallery-overlay">
+                    <span class="gallery-tag">AMAZONÍA</span>
+                    <h3>Proyecto Ixiamas</h3>
+                    <p>Monitoreo de cobertura boscosa en la Amazonía boliviana</p>
+                </div>
+            </div>
+
+            <!-- Fila 3: 2 pequeñas + 1 grande -->
+            <div class="gallery-item reveal">
+                <img src="assets/vuelo_de_drones_en_ixiamas_proyecto_frutos_amazonicos.jpg" alt="Drones en Ixiamas" loading="lazy">
+                <div class="gallery-overlay">
+                    <span class="gallery-tag">DRONES</span>
+                    <h3>Frutos Amazónicos</h3>
+                    <p>Vuelo de drones para proyecto de frutos amazónicos en Ixiamas</p>
+                </div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="assets/proyecto_minero_atocha_potosi.jpg" alt="Proyecto Minero Atocha" loading="lazy">
+                <div class="gallery-overlay">
+                    <span class="gallery-tag">MINERÍA</span>
+                    <h3>Atocha, Potosí</h3>
+                    <p>Proyecto de relevamiento minero en la región de Atocha</p>
+                </div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="assets/taller_de_drones_oruro_Facultad_Nacional_de_Ingenieria.jpg" alt="Taller de Drones Oruro" loading="lazy">
+                <div class="gallery-overlay">
+                    <span class="gallery-tag">CAPACITACIÓN</span>
+                    <h3>Taller de Drones — Oruro</h3>
+                    <p>Capacitación en la Facultad Nacional de Ingeniería de Oruro</p>
+                </div>
+            </div>
+
+            <!-- Fila 4: banner completo -->
+            <div class="gallery-item reveal">
+                <img src="assets/proyecto_sistema_de_drenaje_oruro.jpg" alt="Drenaje Oruro" loading="lazy">
+                <div class="gallery-overlay">
+                    <span class="gallery-tag">TOPOGRAFÍA</span>
+                    <h3>Levantamiento Topográfico — Drenaje Oruro</h3>
+                    <p>Levantamiento topográfico del sistema de drenaje de la ciudad de Oruro</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================
+         DESARROLLO WEB — APLICACIONES Y PÁGINAS PÚBLICAS
+         ===================================================== -->
+    <section class="webdev-section" id="webdev">
+        <div class="section-header">
+            <span class="section-number">04</span>
+            <h2 class="section-title" style="color: var(--topo-cream)">Desarrollo Web</h2>
+            <div class="section-line" style="background: linear-gradient(90deg, var(--accent-gold), transparent)"></div>
+        </div>
+        <p class="webdev-intro reveal">
+            Aplicaciones web desarrolladas con <strong>HTML5, CSS3, JavaScript, Leaflet y Three.js</strong> — 
+            desde herramientas académicas de ingeniería geográfica hasta sistemas completos de gestión comercial. 
+            Cada proyecto es funcional, responsivo y accesible en línea.
+        </p>
+
+        <div class="webdev-filter reveal">
+            <button class="filter-btn active" data-filter="all">Todos</button>
+            <button class="filter-btn" data-filter="academic">Académico</button>
+            <button class="filter-btn" data-filter="commercial">Comercial</button>
+            <button class="filter-btn" data-filter="electoral">Electoral</button>
+        </div>
+
+        <div class="webdev-grid">
+
+            <!-- GeoStats Lab -->
+            <div class="webdev-card reveal" data-category="academic">
+                <div class="webdev-card-header">
+                    <div class="webdev-icon">📊</div>
+                    <div class="webdev-badge">ACADÉMICO</div>
+                </div>
+                <div class="webdev-card-body">
+                    <h3>GeoStats Lab</h3>
+                    <p>Laboratorio de análisis raster con interpolación espacial (IDW, Kriging, TIN), 
+                    visualización 3D del terreno y comparación de métodos geoestadísticos. 
+                    Herramienta interactiva para investigación satelital.</p>
+                    <div class="webdev-tech">
+                        <span>JavaScript</span><span>Three.js</span><span>Canvas</span><span>Geoestadística</span>
+                    </div>
+                </div>
+                <a href="https://gleoleder.github.io/geostats/" target="_blank" class="webdev-link">
+                    <span>Ver Aplicación</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+            </div>
+
+            <!-- GeoCart -->
+            <div class="webdev-card reveal" data-category="academic">
+                <div class="webdev-card-header">
+                    <div class="webdev-icon">🌐</div>
+                    <div class="webdev-badge">ACADÉMICO</div>
+                </div>
+                <div class="webdev-card-body">
+                    <h3>GeoCart — Proyecciones Cartográficas</h3>
+                    <p>Herramienta académica interactiva para comprender el sistema de proyecciones cartográficas. 
+                    Visualización dinámica de diferentes tipos de proyección sobre el globo terráqueo.</p>
+                    <div class="webdev-tech">
+                        <span>JavaScript</span><span>D3.js</span><span>Cartografía</span>
+                    </div>
+                </div>
+                <a href="https://gleoleder.github.io/geocart/" target="_blank" class="webdev-link">
+                    <span>Ver Aplicación</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+            </div>
+
+            <!-- Curvas de Nivel -->
+            <div class="webdev-card reveal" data-category="academic">
+                <div class="webdev-card-header">
+                    <div class="webdev-icon">⛰️</div>
+                    <div class="webdev-badge">ACADÉMICO</div>
+                </div>
+                <div class="webdev-card-body">
+                    <h3>Curvas de Nivel</h3>
+                    <p>Herramienta educativa sobre curvas de nivel en topografía. 
+                    Ayuda a estudiantes de ingeniería a comprender la representación del relieve.</p>
+                    <div class="webdev-tech">
+                        <span>HTML5</span><span>CSS3</span><span>JavaScript</span><span>Topografía</span>
+                    </div>
+                </div>
+                <a href="https://gleoleder.github.io/curvas_de_nivel/" target="_blank" class="webdev-link">
+                    <span>Ver Aplicación</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+            </div>
+
+            <!-- Álgebra de Mapas -->
+            <div class="webdev-card reveal" data-category="academic">
+                <div class="webdev-card-header">
+                    <div class="webdev-icon">🧮</div>
+                    <div class="webdev-badge">ACADÉMICO</div>
+                </div>
+                <div class="webdev-card-body">
+                    <h3>Álgebra de Mapas</h3>
+                    <p>Plataforma educativa para entender operaciones de álgebra de mapas en SIG. 
+                    Operaciones raster, combinación de capas y análisis espacial.</p>
+                    <div class="webdev-tech">
+                        <span>JavaScript</span><span>Canvas</span><span>SIG</span>
+                    </div>
+                </div>
+                <a href="https://gleoleder.github.io/algebra_de_mapas/" target="_blank" class="webdev-link">
+                    <span>Ver Aplicación</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+            </div>
+
+            <!-- Comida Rápida -->
+            <div class="webdev-card reveal" data-category="commercial">
+                <div class="webdev-card-header">
+                    <div class="webdev-icon">🍗</div>
+                    <div class="webdev-badge">COMERCIAL</div>
+                </div>
+                <div class="webdev-card-body">
+                    <h3>Sistema de Caja — Comida Rápida</h3>
+                    <p>Sistema POS completo para punto de venta de comida rápida. Control de órdenes, 
+                    estadísticas de ventas, reportes diarios y exportación CSV.</p>
+                    <div class="webdev-tech">
+                        <span>JavaScript</span><span>Google Sheets API</span><span>POS</span>
+                    </div>
+                </div>
+                <a href="https://gleoleder.github.io/comidarapida/" target="_blank" class="webdev-link">
+                    <span>Ver Aplicación</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+            </div>
+
+            <!-- Transporte -->
+            <div class="webdev-card reveal" data-category="commercial">
+                <div class="webdev-card-header">
+                    <div class="webdev-icon">🚌</div>
+                    <div class="webdev-badge">COMERCIAL</div>
+                </div>
+                <div class="webdev-card-body">
+                    <h3>Sistema de Venta de Boletos</h3>
+                    <p>Plataforma de gestión y venta de boletos para empresas de transporte terrestre. 
+                    Control de flotas, rutas y reservas.</p>
+                    <div class="webdev-tech">
+                        <span>JavaScript</span><span>HTML5</span><span>Gestión</span>
+                    </div>
+                </div>
+                <a href="https://gleoleder.github.io/trans/" target="_blank" class="webdev-link">
+                    <span>Ver Aplicación</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+            </div>
+
+            <!-- Surubí -->
+            <div class="webdev-card reveal" data-category="commercial">
+                <div class="webdev-card-header">
+                    <div class="webdev-icon">🎫</div>
+                    <div class="webdev-badge">COMERCIAL</div>
+                </div>
+                <div class="webdev-card-body">
+                    <h3>Surubí — Venta de Boletos</h3>
+                    <p>Sistema especializado de venta de boletos de viaje para la empresa Surubí. 
+                    Gestión de pasajeros, rutas y emisión de tickets.</p>
+                    <div class="webdev-tech">
+                        <span>JavaScript</span><span>HTML5</span><span>CSS3</span>
+                    </div>
+                </div>
+                <a href="https://gleoleder.github.io/surubi/" target="_blank" class="webdev-link">
+                    <span>Ver Aplicación</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+            </div>
+
+            <!-- Veterinaria -->
+            <div class="webdev-card reveal" data-category="commercial">
+                <div class="webdev-card-header">
+                    <div class="webdev-icon">🐾</div>
+                    <div class="webdev-badge">COMERCIAL</div>
+                </div>
+                <div class="webdev-card-body">
+                    <h3>Control Médico Veterinario</h3>
+                    <p>Sistema integral de control médico veterinario. Registro de pacientes, 
+                    historial clínico, vacunas, tratamientos y citas.</p>
+                    <div class="webdev-tech">
+                        <span>JavaScript</span><span>HTML5</span><span>CSS3</span><span>Salud</span>
+                    </div>
+                </div>
+                <a href="https://gleoleder.github.io/veterinaria/" target="_blank" class="webdev-link">
+                    <span>Ver Aplicación</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+            </div>
+
+            <!-- Vichaya -->
+            <div class="webdev-card reveal" data-category="commercial">
+                <div class="webdev-card-header">
+                    <div class="webdev-icon">🪵</div>
+                    <div class="webdev-badge">COMERCIAL</div>
+                </div>
+                <div class="webdev-card-body">
+                    <h3>Estudio Vichaya</h3>
+                    <p>Página de presentación para los vendedores del estudio de Vichaya. 
+                    Catálogo de productos, información comercial y contacto directo.</p>
+                    <div class="webdev-tech">
+                        <span>HTML5</span><span>CSS3</span><span>JavaScript</span>
+                    </div>
+                </div>
+                <a href="https://gleoleder.github.io/vichaya/" target="_blank" class="webdev-link">
+                    <span>Ver Aplicación</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+            </div>
+
+            <!-- Hotel -->
+            <div class="webdev-card reveal" data-category="commercial">
+                <div class="webdev-card-header">
+                    <div class="webdev-icon">🏨</div>
+                    <div class="webdev-badge">COMERCIAL</div>
+                </div>
+                <div class="webdev-card-body">
+                    <h3>Control Recepcionista de Hotel</h3>
+                    <p>Sistema de gestión para recepción de hotel. Check-in/check-out, 
+                    disponibilidad de habitaciones, reservas y registro de huéspedes.</p>
+                    <div class="webdev-tech">
+                        <span>JavaScript</span><span>HTML5</span><span>Gestión Hotelera</span>
+                    </div>
+                </div>
+                <a href="https://gleoleder.github.io/hotel/" target="_blank" class="webdev-link">
+                    <span>Ver Aplicación</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+            </div>
+
+            <!-- Colegio Asistencia -->
+            <div class="webdev-card reveal" data-category="commercial">
+                <div class="webdev-card-header">
+                    <div class="webdev-icon">🎓</div>
+                    <div class="webdev-badge">COMERCIAL</div>
+                </div>
+                <div class="webdev-card-body">
+                    <h3>Control de Asistencia — Instituto</h3>
+                    <p>Sistema de control de asistencia para instituciones educativas. 
+                    Registro de estudiantes, reportes de asistencia y seguimiento.</p>
+                    <div class="webdev-tech">
+                        <span>JavaScript</span><span>HTML5</span><span>Educación</span>
+                    </div>
+                </div>
+                <a href="https://gleoleder.github.io/colegio_asistencia/" target="_blank" class="webdev-link">
+                    <span>Ver Aplicación</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+            </div>
+
+            <!-- Disfraces Fantasía -->
+            <div class="webdev-card reveal" data-category="commercial">
+                <div class="webdev-card-header">
+                    <div class="webdev-icon">🎭</div>
+                    <div class="webdev-badge">COMERCIAL</div>
+                </div>
+                <div class="webdev-card-body">
+                    <h3>Disfraces Fantasía</h3>
+                    <p>Sistema de control para tienda de disfraces. Inventario, alquiler, 
+                    disponibilidad de trajes y gestión de clientes.</p>
+                    <div class="webdev-tech">
+                        <span>JavaScript</span><span>HTML5</span><span>CSS3</span><span>Inventario</span>
+                    </div>
+                </div>
+                <a href="https://fantasiadisfraces.github.io/disfracesfantasia/" target="_blank" class="webdev-link">
+                    <span>Ver Aplicación</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+            </div>
+
+            <!-- Elecciones 2025 -->
+            <div class="webdev-card reveal" data-category="electoral">
+                <div class="webdev-card-header">
+                    <div class="webdev-icon">🗳️</div>
+                    <div class="webdev-badge">ELECTORAL</div>
+                </div>
+                <div class="webdev-card-body">
+                    <h3>Mapa de Elecciones Bolivia 2025</h3>
+                    <p>Mapa interactivo de las elecciones generales de Bolivia 2025. 
+                    Visualización geoespacial de datos electorales por región y departamento.</p>
+                    <div class="webdev-tech">
+                        <span>Leaflet</span><span>GeoJSON</span><span>JavaScript</span><span>Mapas</span>
+                    </div>
+                </div>
+                <a href="https://gleoleder.github.io/elecciones2025/" target="_blank" class="webdev-link">
+                    <span>Ver Aplicación</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+            </div>
+
+            <!-- Control Electoral Formulario 2 -->
+            <div class="webdev-card reveal" data-category="electoral">
+                <div class="webdev-card-header">
+                    <div class="webdev-icon">📋</div>
+                    <div class="webdev-badge">ELECTORAL</div>
+                </div>
+                <div class="webdev-card-body">
+                    <h3>Control Electoral — Innovación Humana</h3>
+                    <p>Sistema de control electoral para el partido político Innovación Humana. 
+                    Registro de delegados, formularios y seguimiento del proceso electoral.</p>
+                    <div class="webdev-tech">
+                        <span>JavaScript</span><span>Formularios</span><span>Google Sheets</span>
+                    </div>
+                </div>
+                <a href="https://gleoleder.github.io/controlelectoralformulario2/" target="_blank" class="webdev-link">
+                    <span>Ver Aplicación</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+            </div>
+
+            <!-- Control Electoral Ciudadano -->
+            <div class="webdev-card reveal" data-category="electoral">
+                <div class="webdev-card-header">
+                    <div class="webdev-icon">🗒️</div>
+                    <div class="webdev-badge">ELECTORAL</div>
+                </div>
+                <div class="webdev-card-body">
+                    <h3>Control Electoral Ciudadano</h3>
+                    <p>Plataforma de control electoral para ciudadanos. Verificación de votos, 
+                    seguimiento de resultados y transparencia del proceso democrático.</p>
+                    <div class="webdev-tech">
+                        <span>JavaScript</span><span>HTML5</span><span>Formularios</span>
+                    </div>
+                </div>
+                <a href="https://gleoleder.github.io/controlelectoralformulario/" target="_blank" class="webdev-link">
+                    <span>Ver Aplicación</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Interactive Bolivia Map Section -->
+    <section class="map-section" id="map">
+        <div class="section-header">
+            <span class="section-number">05</span>
+            <h2 class="section-title" style="color: var(--topo-cream)">Áreas de Trabajo en Bolivia</h2>
+            <div class="section-line" style="background: linear-gradient(90deg, var(--accent-gold), transparent)"></div>
+        </div>
+        <div class="map-wrapper">
+            <div class="map-info reveal">
+                <h3>Mi Territorio</h3>
+                <p>
+                    Desde El Alto, he tenido el privilegio de trabajar en diversos ecosistemas bolivianos, 
+                    desde el altiplano hasta la Amazonía, contribuyendo a proyectos de conservación, 
+                    desarrollo minero y gestión de riesgos naturales.
+                </p>
+                <ul class="project-locations-list">
+                    <li>
+                        <span class="location-name">🏠 El Alto</span>
+                        <span class="location-type">BASE</span>
+                    </li>
+                    <li>
+                        <span class="location-name">⛏️ Oruro</span>
+                        <span class="location-type">MINERÍA</span>
+                    </li>
+                    <li>
+                        <span class="location-name">🌳 Ixiamas</span>
+                        <span class="location-type">AMAZONÍA</span>
+                    </li>
+                    <li>
+                        <span class="location-name">🏔️ Yungas</span>
+                        <span class="location-type">RIESGOS</span>
+                    </li>
+                    <li>
+                        <span class="location-name">🏛️ Potosí</span>
+                        <span class="location-type">PATRIMONIO</span>
+                    </li>
+                </ul>
+            </div>
+            <div id="bolivia-map" class="reveal"></div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="experience" id="experience">
+        <div class="section-header">
+            <span class="section-number">06</span>
+            <h2 class="section-title">Experiencia</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="timeline-year">2021 - PRESENTE</span>
+                    <h3 class="timeline-title">Especialista GIS Senior</h3>
+                    <p class="timeline-company">Instituto Geográfico Militar - Bolivia</p>
+                    <p class="timeline-desc">
+                        Liderazgo en proyectos de cartografía nacional, implementación de 
+                        infraestructura de datos espaciales y capacitación técnica.
+                    </p>
+                </div>
+            </div>
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="timeline-year">2018 - 2021</span>
+                    <h3 class="timeline-title">Analista de Teledetección</h3>
+                    <p class="timeline-company">Autoridad de Bosques y Tierra (ABT)</p>
+                    <p class="timeline-desc">
+                        Procesamiento de imágenes satelitales para monitoreo de deforestación, 
+                        desarrollo de alertas tempranas de cambio de uso de suelo.
+                    </p>
+                </div>
+            </div>
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="timeline-year">2016 - 2018</span>
+                    <h3 class="timeline-title">Ingeniero de Campo</h3>
+                    <p class="timeline-company">SERGEOTECMIN</p>
+                    <p class="timeline-desc">
+                        Ejecución de levantamientos geológicos-mineros, procesamiento de datos 
+                        GNSS y elaboración de mapas temáticos de recursos minerales.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <h2 class="contact-title reveal">¿Trabajamos juntos?</h2>
+        <p class="contact-subtitle reveal">
+            Siempre estoy interesado en nuevos proyectos que involucren 
+            análisis espacial, cartografía innovadora, desarrollo web o soluciones geotecnológicas en Bolivia.
+        </p>
+        <div class="contact-links reveal">
+            <a href="mailto:leoleder1@gmail.com" class="contact-link">
+                <span>✉</span> leoleder1@gmail.com
+            </a>
+            <a href="tel:+59160418185" class="contact-link">
+                <span>☎</span> +591 60418185
+            </a>
+            <a href="https://wa.me/59160418185" class="contact-link" target="_blank">
+                <span>💬</span> WhatsApp
+            </a>
+            <a href="https://www.linkedin.com/in/leonardo-cabrera-239252217" class="contact-link" target="_blank">
+                <span>in</span> LinkedIn
+            </a>
+            <a href="https://github.com/gleoleder" class="contact-link" target="_blank">
+                <span>⟨/⟩</span> GitHub
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-coords">
+            <span>16°30'00"S 68°09'00"W — El Alto, Bolivia</span>
+        </div>
+        <div class="footer-copy">
+            © 2025 Geogr. John Leonardo Cabrera Espíndola — Diseñado con pasión geográfica y código
+        </div>
+    </footer>
+
+    <!-- Lightbox para Galería -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close">&times;</button>
+        <button class="lightbox-prev">&#8249;</button>
+        <button class="lightbox-next">&#8250;</button>
+        <img class="lightbox-img" id="lightbox-img" src="" alt="">
+        <div class="lightbox-caption" id="lightbox-caption"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
